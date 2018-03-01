@@ -2,10 +2,14 @@ class Building:
     seconds_of_operation = 28800
     elevator_count = 4
     floor_count = 20
+    elevators = []
 
     def __init__(self, elevators=None, floors=None):
         self.elevator_count = elevators if elevators else self.elevator_count
         self.floor_count = floors if floors else self.floor_count
+
+        # associate elevators with building
+        self.elevators = [Elevator(uid=x) for x in range(0, self.elevator_count)]
 
 
 class Elevator:
@@ -20,6 +24,9 @@ class Elevator:
     doors_open = False
     service_required = False
     track_weight = False
+
+    def __init__(self, uid):
+        self.id = uid
 
     def status_check(self):
         if self.trip_count > self.safe_trips:
