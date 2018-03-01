@@ -9,11 +9,11 @@ def open_building():
     # randomly add people into building for simulation
     people = 11
     for person in range(0, people):
-        loc = randint(0, building.floor_count - 1)
-        dest_options = range(0, loc) + range(loc + 1, building.floor_count)
-        dest = choice(dest_options)
+        location = randint(0, building.floor_count - 1)
+        destination_options = [x for x in range(0, building.floor_count) if x != location]
+        destination = choice(destination_options)
 
-        building.add_person(loc, dest)
+        building.add_person(location, destination)
 
     for person in building.people:
-        print(person)
+        print(person.location, person.destination)
