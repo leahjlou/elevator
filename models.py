@@ -24,11 +24,9 @@ class Building:
 
     def find_nearest_elevator(self, location, destination):
         displacement = location - destination
-        # first, rank elevators in transit
-        by_rank = [(rec, rec.transit_distance) for rec in self.elevators if rec.in_transit]
 
-        # then, rank stationed elevators
-        by_rank.extend([(rec, rec.static_distance(destination)) for rec in self.elevators if not rec.in_transit])
+        # rank elevators by distance from location
+        by_rank = [(rec, rec.transit_distance) for rec in self.elevators]
 
 
 class Elevator:
@@ -55,12 +53,9 @@ class Elevator:
     def report_location(self):
         print(self.location)
 
-    def static_distance(self, destination):
-        return self.location - destination
-
-    @property
-    def transit_distance(self):
-        return self.location - self.destination
+    def transit_distance(self, destination):
+        distance = self.location - self.destination if self.in_transit else self.location - destination
+        return distance
 
 
 class Person:
