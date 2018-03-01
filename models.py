@@ -20,7 +20,8 @@ class Building:
         self.people.append(Person(location, destination, weight))
 
     def deploy_elevator(self, person):
-        pass
+        elevator = self.find_nearest_elevator(person.location, person.destination)
+        elevator.queue_trip(person.destination)
 
     def find_nearest_elevator(self, location, destination):
         ideal_elevator = [rec for rec in self.elevators if rec.location == location and not rec.in_transit]
@@ -49,6 +50,8 @@ class Elevator:
     service_required = False
     track_weight = False
 
+    trip_queue = []
+
     def __init__(self, uid):
         self.id = uid
 
@@ -72,6 +75,10 @@ class Elevator:
             distance = abs(self.location - destination)
 
         return distance
+
+    def queue_trip(self, destination):
+        init_floor = self.destination if self.in_transit else self.location
+        self.trip_queue.append([x for x in range(init_floor, destination)])
 
 
 class Person:
