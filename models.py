@@ -23,10 +23,16 @@ class Building:
         pass
 
     def find_nearest_elevator(self, location, destination):
-        displacement = location - destination
+        ideal_elevator = [rec for rec in self.elevators if rec.location == location and not rec.in_transit]
+        if ideal_elevator:
+            # if an ideal elevator is found, return the first result
+            return ideal_elevator[0]
 
-        # rank elevators by distance from location
-        by_rank = [(rec, rec.transit_distance) for rec in self.elevators]
+        # rank elevators by distance from location and sort
+        by_rank = [(rec, rec.transit_distance(destination)) for rec in self.elevators]
+        by_rank.sort(key=lambda rec: rec[1])
+
+        return by_rank[0][0]
 
 
 class Elevator:
@@ -54,7 +60,17 @@ class Elevator:
         print(self.location)
 
     def transit_distance(self, destination):
-        distance = self.location - self.destination if self.in_transit else self.location - destination
+        if self.in_transit:
+            displacement = self.location - destination
+            if displacement < 0:
+                distance = abs(self.location - self.destination) + self.destination - destination
+            else:
+                distance = displacement
+            return distance
+
+        else:
+            distance = abs(self.location - destination)
+
         return distance
 
 
