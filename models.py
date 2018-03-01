@@ -19,11 +19,21 @@ class Building:
     def add_person(self, location, destination, weight=None):
         self.people.append(Person(location, destination, weight))
 
+    def deploy_elevator(self, person):
+        pass
+
+    def find_nearest_elevator(self, location):
+        # group elevators by distance from location
+        elevator_by_rank = [(rec, rec.transit_distance) for rec in self.elevators if rec.in_transit]
+
+
+
 
 class Elevator:
     trip_count = 0
     floors_passed = 0
     location = 0
+    destination = 0
     trip_limit = 100
     weight_limit = 2000
 
@@ -43,9 +53,16 @@ class Elevator:
     def report_location(self):
         print(self.location)
 
+    @property
+    def transit_distance(self):
+        return self.location - self.destination
+
 
 class Person:
     def __init__(self, location, destination, weight=None):
         self.location = location
         self.destination = destination
         self.weight = weight if weight else None
+
+    def call_elevator(self):
+        pass

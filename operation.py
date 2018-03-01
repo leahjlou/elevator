@@ -14,6 +14,3 @@ def open_building():
         destination = choice(destination_options)
 
         building.add_person(location, destination)
-
-    for person in building.people:
-        print(person.location, person.destination)
