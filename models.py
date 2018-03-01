@@ -89,7 +89,7 @@ class Elevator:
         self.deploy()
 
     def deploy(self):
-        self.destination = self.trip_queue[self.trip_count][:-1]
+        self.destination = self.trip_queue[self.trip_count][-1]
         self.in_transit = True
 
         for floor in self.trip_queue[self.trip_count]:
