@@ -24,6 +24,7 @@ class Building:
 
     def deploy_elevator(self, person):
         elevator = self.find_nearest_elevator(person.location, person.destination)
+        elevator.passengers.append(person)
         elevator.queue_trip(person.destination)
 
     def find_nearest_elevator(self, location, destination):
@@ -56,6 +57,7 @@ class Elevator:
 
     floor_queue = []
     trip_queue = []
+    passengers = []
 
     def __init__(self, uid):
         self.id = uid
@@ -89,7 +91,7 @@ class Elevator:
     def deploy(self):
         self.destination = self.trip_queue[self.trip_count][:-1]
         self.in_transit = True
-        
+
         for floor in self.trip_queue[self.trip_count]:
             time.sleep(1)
             self.location = floor
@@ -108,6 +110,21 @@ class Elevator:
 
         if len(self.trip_queue) > self.trip_count:
             self.deploy()
+
+    def move_people(self):
+        if self.passengers:
+            arrivals = [person for person in self.passengers if person.destination == self.location]
+            if arrivals:
+                self.passengers = self.passengers - arrivals
+                for arrival in arrivals:
+                    arrival.location = self.destination
+
+            departures = [person for person in self.passengers if person.location == self.location]
+            if departures:
+                self.occupied = True
+
+        if not self.passengers:
+            self.occupied = False
 
 
 class Person:
