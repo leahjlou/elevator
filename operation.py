@@ -18,4 +18,4 @@ def open_building():
 
     for person in building.people:
         building.deploy_elevator(person)
-        time.sleep(3)
+        time.sleep(.5)

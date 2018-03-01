@@ -67,13 +67,11 @@ class Elevator:
         if self.trip_count > self.trip_limit:
             self.service_required = True
 
-    def report_location(self):
-        print(self.location)
-
     def transit_distance(self, destination):
         if self.in_transit:
             displacement = self.location - destination
             if displacement < 0:
+                print(type(self.location), type(self.destination))
                 distance = abs(self.location - self.destination) + self.destination - destination
             else:
                 distance = displacement
@@ -88,13 +86,14 @@ class Elevator:
         init_floor = self.destination if self.in_transit else self.location
         self.trip_queue.append([x for x in range(init_floor, destination)])
         self.floor_queue.extend([x for x in range(init_floor, destination)])
+        self.deploy()
 
     def deploy(self):
         self.destination = self.trip_queue[self.trip_count][:-1]
         self.in_transit = True
 
         for floor in self.trip_queue[self.trip_count]:
-            time.sleep(1)
+            time.sleep(.33)
             self.location = floor
             self.floors_passed += 1
             print(self.location)
@@ -107,7 +106,8 @@ class Elevator:
     def arrival(self):
         self.doors_open = True
         self.move_people()
-        time.sleep(5)
+        time.sleep(2)
+        print('arrival')
         self.doors_open = False
 
         if len(self.trip_queue) > self.trip_count:
