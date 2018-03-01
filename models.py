@@ -26,6 +26,7 @@ class Building:
         elevator = self.find_nearest_elevator(person.location, person.destination)
         elevator.passengers.append(person)
         elevator.queue_trip(person.destination)
+        print('queued')
 
     def find_nearest_elevator(self, location, destination):
         ideal_elevator = [rec for rec in self.elevators if
@@ -105,6 +106,7 @@ class Elevator:
 
     def arrival(self):
         self.doors_open = True
+        self.move_people()
         time.sleep(5)
         self.doors_open = False
 
@@ -123,6 +125,7 @@ class Elevator:
             if departures:
                 self.occupied = True
 
+        print(self.passengers)
         if not self.passengers:
             self.occupied = False
 
@@ -132,6 +135,3 @@ class Person:
         self.location = location
         self.destination = destination
         self.weight = weight if weight else None
-
-    def call_elevator(self):
-        pass

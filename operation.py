@@ -1,10 +1,11 @@
+import time
+
 from models import Building
 from random import randint, choice
 
 
 def open_building():
     building = Building(elevators=6, floors=20)
-    print(building.elevators)
 
     # randomly add people into building for simulation
     people = 11
@@ -14,3 +15,7 @@ def open_building():
         destination = choice(destination_options)
 
         building.add_person(location, destination)
+
+    for person in building.people:
+        building.deploy_elevator(person)
+        time.sleep(3)
