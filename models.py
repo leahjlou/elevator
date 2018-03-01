@@ -22,11 +22,13 @@ class Building:
     def deploy_elevator(self, person):
         pass
 
-    def find_nearest_elevator(self, location):
-        # group elevators by distance from location
-        elevator_by_rank = [(rec, rec.transit_distance) for rec in self.elevators if rec.in_transit]
+    def find_nearest_elevator(self, location, destination):
+        displacement = location - destination
+        # first, rank elevators in transit
+        by_rank = [(rec, rec.transit_distance) for rec in self.elevators if rec.in_transit]
 
-
+        # then, rank stationed elevators
+        by_rank.extend([(rec, rec.static_distance(destination)) for rec in self.elevators if not rec.in_transit])
 
 
 class Elevator:
@@ -52,6 +54,9 @@ class Elevator:
 
     def report_location(self):
         print(self.location)
+
+    def static_distance(self, destination):
+        return self.location - destination
 
     @property
     def transit_distance(self):
