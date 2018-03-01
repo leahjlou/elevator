@@ -50,7 +50,9 @@ class Elevator:
     service_required = False
     track_weight = False
 
+    floor_queue = []
     trip_queue = []
+    queue_idx = 0
 
     def __init__(self, uid):
         self.id = uid
@@ -79,6 +81,7 @@ class Elevator:
     def queue_trip(self, destination):
         init_floor = self.destination if self.in_transit else self.location
         self.trip_queue.append([x for x in range(init_floor, destination)])
+        self.floor_queue.extend([x for x in range(init_floor, destination)])
 
 
 class Person:
