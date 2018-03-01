@@ -2,7 +2,9 @@ class Building:
     seconds_of_operation = 28800
     elevator_count = 4
     floor_count = 20
+    floors = []
     elevators = []
+    people = []
 
     def __init__(self, elevators=None, floors=None):
         self.elevator_count = elevators if elevators else self.elevator_count
@@ -11,12 +13,18 @@ class Building:
         # associate elevators with building
         self.elevators = [Elevator(uid=x) for x in range(0, self.elevator_count)]
 
+        # not sure it'll be needed, but saved for later
+        self.floors = [num for num in range(0, self.floor_count)]
+
+    def add_person(self, location, destination, weight=None):
+        self.people.append(Person(location, destination, weight))
+
 
 class Elevator:
     trip_count = 0
     floors_passed = 0
     location = 0
-    safe_trips = 100
+    trip_limit = 100
     weight_limit = 2000
 
     occupied = False
@@ -29,7 +37,7 @@ class Elevator:
         self.id = uid
 
     def status_check(self):
-        if self.trip_count > self.safe_trips:
+        if self.trip_count > self.trip_limit:
             self.service_required = True
 
     def report_location(self):
